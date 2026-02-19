@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+/* ── Arlecchino / GFX Design System ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --crimson: #4a0404;
+  --crimson-light: #8b1a1a;
+  --crimson-mid: #6b0f0f;
+  --crimson-glow: #c43030;
+  --charcoal: #1a1a1a;
+  --charcoal-deep: #0a0a0a;
+  --bone: #f5f0eb;
+  --bone-muted: #d4cfc8;
+  --gold: #c9a84c;
+  --gold-light: #e6d18e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--charcoal-deep);
+  --color-foreground: var(--bone);
+  --color-crimson: var(--crimson);
+  --color-crimson-light: var(--crimson-light);
+  --color-crimson-mid: var(--crimson-mid);
+  --color-crimson-glow: var(--crimson-glow);
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-deep: var(--charcoal-deep);
+  --color-bone: var(--bone);
+  --color-bone-muted: var(--bone-muted);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-gfx: var(--font-josefin);
+  --font-tech: var(--font-orbitron);
+  --animate-spin-slow: spin 12s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base Styles ── */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--charcoal-deep);
+  color: var(--bone);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Typography Utilities ── */
+.font-serif {
+  font-family: var(--font-serif), "Playfair Display", Georgia, "Times New Roman",
+    serif;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace,
+    monospace;
+}
+
+/* ── GFX Text Effects ── */
+.text-glow-crimson {
+  text-shadow:
+    0 0 10px rgba(139, 26, 26, 0.4),
+    0 0 40px rgba(74, 4, 4, 0.2);
+}
+
+.text-glow-gold {
+  text-shadow:
+    0 0 10px rgba(201, 168, 76, 0.4),
+    0 0 40px rgba(201, 168, 76, 0.15);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--crimson-light);
+  color: var(--bone);
+}
+
+/* ── Scrollbar (hidden) ── */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Perspective for 3D card flips ── */
+.perspective-\[800px\] {
+  perspective: 800px;
+}
+
+/* ── Canvas container ── */
+canvas {
+  display: block;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

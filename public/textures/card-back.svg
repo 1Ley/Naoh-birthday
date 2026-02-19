@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280">
+  <defs>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a0404;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1a0a0a;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="280" rx="12" fill="url(#cardGrad)"/>
+  <rect x="10" y="10" width="180" height="260" rx="8" fill="none" stroke="#8b1a1a" stroke-width="1.5" opacity="0.6"/>
+  <!-- Fatui-inspired cross pattern -->
+  <g transform="translate(100,140)" opacity="0.3">
+    <line x1="-50" y1="0" x2="50" y2="0" stroke="#f5f0eb" stroke-width="2"/>
+    <line x1="0" y1="-70" x2="0" y2="70" stroke="#f5f0eb" stroke-width="2"/>
+    <polygon points="0,-40 10,-20 0,-25 -10,-20" fill="#8b1a1a"/>
+    <polygon points="0,40 10,20 0,25 -10,20" fill="#8b1a1a"/>
+    <polygon points="-30,0 -10,10 -15,0 -10,-10" fill="#8b1a1a"/>
+    <polygon points="30,0 10,10 15,0 10,-10" fill="#8b1a1a"/>
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#8b1a1a" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="3" fill="#8b1a1a"/>
+  </g>
+  <!-- Corner diamonds -->
+  <g opacity="0.25">
+    <polygon points="30,30 35,25 40,30 35,35" fill="#f5f0eb"/>
+    <polygon points="160,30 165,25 170,30 165,35" fill="#f5f0eb"/>
+    <polygon points="30,250 35,245 40,250 35,255" fill="#f5f0eb"/>
+    <polygon points="160,250 165,245 170,250 165,255" fill="#f5f0eb"/>
+  </g>
+</svg>
