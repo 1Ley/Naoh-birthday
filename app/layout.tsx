@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter, Josefin_Sans, Orbitron } from "next/font/google";
 import "./globals.css";
+import Preloader from "@/components/Preloader";
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -13,6 +14,7 @@ const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const josefin = Josefin_Sans({
@@ -43,6 +45,7 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${inter.variable} ${josefin.variable} ${orbitron.variable} antialiased bg-charcoal-deep text-bone overflow-hidden`}
       >
+        <Preloader />
         {children}
       </body>
     </html>
