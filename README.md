@@ -1,6 +1,6 @@
 # Naoh Birthday
 
-Aplicación web interactiva construida con Next.js.
+Aplicación web interactiva construida con Next.js. Desarrollada por Ley.
 
 ## Stack
 
@@ -60,3 +60,17 @@ public/        recursos estáticos
 El proyecto está preparado para Vercel. Importa el repositorio desde el panel de Vercel; la configuración de Next.js se detecta automáticamente y no requiere ajustes adicionales.
 
 Para cualquier otro entorno, ejecuta `npm run build` y sirve la aplicación con `npm run start`.
+
+## Créditos
+
+Desarrollado por Ley.
+
+SVGs generados con Gemini 2.5 Pro.
+
+El código de movimiento y tiempo se apoya en librerías de terceros, con el crédito correspondiente a sus creadores:
+
+- GSAP — GreenSock
+- Framer Motion — Framer
+- Three.js — Ricardo Cabello (mrdoob)
+- React Three Fiber y Drei — Poimandres
+- Zustand — Poimandres
