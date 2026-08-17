@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-// ─── Textos de carga (Fase 3) ───
+// Textos de la pantalla de carga nd mas
 const LOADING_LINES = [
     'Haz asustado a furina',
     'Furina esta huyendo',
@@ -17,29 +17,28 @@ export default function CinematicRunnerPage() {
     const [phase, setPhase] = useState(0); // 0-3
     const [textIndex, setTextIndex] = useState(0);
 
-    // ─── Phase Timers ───
-    // Phase 0: comic_arle2.png (Arle abre la puerta) → 3.5s
+    // Phase 0: comic_arle2.png (Arleputa abre la puerta)
     useEffect(() => {
         if (phase !== 0) return;
         const timer = setTimeout(() => setPhase(1), 3500);
         return () => clearTimeout(timer);
     }, [phase]);
 
-    // Phase 1: comic_arle.png (Furina sorprendida) → 3.5s
+    // Phase 1: comic_arle.png (Llantarina sorprendida)
     useEffect(() => {
         if (phase !== 1) return;
         const timer = setTimeout(() => setPhase(2), 3500);
         return () => clearTimeout(timer);
     }, [phase]);
 
-    // Phase 2: Face-off banners → 4.5s
+    // Phase 2: banners de enfrentamiento
     useEffect(() => {
         if (phase !== 2) return;
         const timer = setTimeout(() => setPhase(3), 4500);
         return () => clearTimeout(timer);
     }, [phase]);
 
-    // Phase 3: Loading texts → sequential then navigate
+    // Phase 3: textos de carga en secuencia y salto al juego
     useEffect(() => {
         if (phase !== 3) return;
         const timers = [
@@ -53,7 +52,7 @@ export default function CinematicRunnerPage() {
     return (
         <div className="relative w-screen h-screen overflow-hidden bg-white">
 
-            {/* ════════════════════ FASE 0: COMIC PANEL — Arle abre la puerta ════════════════════ */}
+            {/* Fase 0: Arle abre la puerta */}
             <AnimatePresence>
                 {phase === 0 && (
                     <motion.div
@@ -73,7 +72,6 @@ export default function CinematicRunnerPage() {
                             }}
                         />
 
-                        {/* Comic panel with irregular frame */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.85, rotate: -2 }}
                             animate={{ opacity: 1, scale: 1, rotate: -1 }}
@@ -89,7 +87,6 @@ export default function CinematicRunnerPage() {
                             />
                         </motion.div>
 
-                        {/* Manga SFX text */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
                             animate={{ opacity: 1, scale: 1, rotate: -8 }}
@@ -104,7 +101,7 @@ export default function CinematicRunnerPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════ FASE 1: COMIC PANEL — Furina sorprendida ════════════════════ */}
+            {/* Fase 1: Furina sorprendida */}
             <AnimatePresence>
                 {phase === 1 && (
                     <motion.div
@@ -132,7 +129,6 @@ export default function CinematicRunnerPage() {
                             ))}
                         </div>
 
-                        {/* Comic panel */}
                         <motion.div
                             initial={{ opacity: 0, y: 80, scale: 0.9 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -148,7 +144,6 @@ export default function CinematicRunnerPage() {
                             />
                         </motion.div>
 
-                        {/* Shock SFX */}
                         <motion.div
                             initial={{ opacity: 0, scale: 3 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -165,7 +160,7 @@ export default function CinematicRunnerPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════ FASE 2: FACE-OFF BANNERS ════════════════════ */}
+            {/* Fase 2: banners de enfrentamiento */}
             <AnimatePresence>
                 {phase === 2 && (
                     <motion.div
@@ -193,7 +188,7 @@ export default function CinematicRunnerPage() {
                             ))}
                         </div>
 
-                        {/* ── Banner Arlecchino (arriba) — entra desde la DERECHA ── */}
+                        {/* Banner de Arlecchino, entra desde la derecha */}
                         <motion.div
                             initial={{ x: '100vw' }}
                             animate={{ x: '0vw' }}
@@ -210,15 +205,11 @@ export default function CinematicRunnerPage() {
                                 className="object-cover object-center"
                                 priority
                             />
-                            {/* Dramatic border */}
                             <div className="absolute inset-0 border-[3px] border-white/30 pointer-events-none" />
-                            {/* Red glow on edge */}
                             <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-red-900/50 to-transparent" />
                         </motion.div>
 
-
-
-                        {/* ── Banner Furina (abajo) — entra desde la IZQUIERDA ── */}
+                        {/* Banner de Furina, entra desde la izquierda */}
                         <motion.div
                             initial={{ x: '-100vw' }}
                             animate={{ x: '0vw' }}
@@ -250,7 +241,7 @@ export default function CinematicRunnerPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════ FASE 3: TEXTOS DE CARGA ════════════════════ */}
+            {/* Fase 3: textos de carga */}
             <AnimatePresence>
                 {phase === 3 && (
                     <motion.div

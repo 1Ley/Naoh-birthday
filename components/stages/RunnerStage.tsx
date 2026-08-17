@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-// ─── Game Constants ───
 const LANE_COUNT = 3;
 const LANE_POSITIONS = [20, 50, 80]; // % from top
 const GAME_TICK = 33; // ~30fps
@@ -29,6 +28,17 @@ interface Obstacle {
 
 let obstacleCounter = 0;
 
+// Tiled background band. It pans one full tile per cycle, so the loop never shows a seam.
+function panLayer(src: string, tileWidth: number): CSSProperties {
+    return {
+        backgroundImage: `url(${src})`,
+        backgroundSize: `${tileWidth}px 100%`,
+        backgroundRepeat: 'repeat-x',
+        backgroundPosition: 'bottom left',
+        '--pan': `-${tileWidth}px`,
+    } as CSSProperties;
+}
+
 export default function RunnerStage() {
     const router = useRouter();
     const [playerLane, setPlayerLane] = useState(1); // 0, 1, 2
@@ -38,7 +48,6 @@ export default function RunnerStage() {
     const [isCaptured, setIsCaptured] = useState(false);
     const [hitFlash, setHitFlash] = useState(false);
     const [starBoost, setStarBoost] = useState(false);
-    const [roadOffset, setRoadOffset] = useState(0);
     const [showCountdown, setShowCountdown] = useState(true);
     const [countdownNum, setCountdownNum] = useState(3);
     const [comboCount, setComboCount] = useState(0);
@@ -47,17 +56,12 @@ export default function RunnerStage() {
     const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const spawnSlimeRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const spawnStarRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const keysRef = useRef<Set<string>>(new Set());
     const lastLaneChangeRef = useRef(0);
     const starBoostTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const furinaRef = useRef(FURINA_START_X);
     const playerLaneRef = useRef(1);
 
-    // Sync refs
-    useEffect(() => { furinaRef.current = furinaX; }, [furinaX]);
     useEffect(() => { playerLaneRef.current = playerLane; }, [playerLane]);
 
-    // ─── Countdown Timer ───
     useEffect(() => {
         if (!showCountdown) return;
         const timers = [
@@ -71,11 +75,8 @@ export default function RunnerStage() {
         return () => timers.forEach(clearTimeout);
     }, [showCountdown]);
 
-    // ─── Keyboard Input ───
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            keysRef.current.add(e.key);
-
             // Lane switching with debounce
             const now = Date.now();
             if (now - lastLaneChangeRef.current < 150) return;
@@ -89,25 +90,17 @@ export default function RunnerStage() {
                 lastLaneChangeRef.current = now;
             }
         };
-        const handleKeyUp = (e: KeyboardEvent) => {
-            keysRef.current.delete(e.key);
-        };
-
         window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('keyup', handleKeyUp);
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
         };
     }, []);
 
-    // ─── Touch Controls (Mobile) ───
     const handleLaneClick = useCallback((lane: number) => {
         if (!gameActive || showCountdown) return;
         setPlayerLane(lane);
     }, [gameActive, showCountdown]);
 
-    // ─── Spawn Slimes ───
     useEffect(() => {
         if (!gameActive || showCountdown) return;
 
@@ -129,7 +122,6 @@ export default function RunnerStage() {
         };
     }, [gameActive, showCountdown]);
 
-    // ─── Spawn Stars ───
     useEffect(() => {
         if (!gameActive || showCountdown) return;
 
@@ -151,15 +143,11 @@ export default function RunnerStage() {
         };
     }, [gameActive, showCountdown]);
 
-    // ─── Main Game Loop ───
+    // Main game loop
     useEffect(() => {
         if (!gameActive || showCountdown) return;
 
         gameLoopRef.current = setInterval(() => {
-            // Move road
-            setRoadOffset(prev => (prev + 3) % 200);
-
-            // Move Furina closer
             setFurinaX(prev => {
                 const speed = starBoost ? FURINA_STAR_BOOST : FURINA_BASE_SPEED;
                 const next = prev - speed;
@@ -171,7 +159,6 @@ export default function RunnerStage() {
                 return next;
             });
 
-            // Move obstacles
             setObstacles(prev => {
                 const currentLane = playerLaneRef.current;
                 const remaining: Obstacle[] = [];
@@ -179,19 +166,16 @@ export default function RunnerStage() {
                 for (const obs of prev) {
                     const newX = obs.x - (obs.type === 'slime' ? SLIME_SPEED : STAR_SPEED);
 
-                    // Check collision with player
                     const inPlayerZone = newX >= ARLE_X - 6 && newX <= ARLE_X + 10;
                     const inPlayerLane = obs.lane === currentLane;
 
                     if (inPlayerZone && inPlayerLane) {
                         if (obs.type === 'slime') {
-                            // Hit by slime — push Furina back
                             setFurinaX(f => Math.min(FURINA_START_X, f + FURINA_HIT_PENALTY));
                             setHitFlash(true);
                             setComboCount(0);
                             setTimeout(() => setHitFlash(false), 300);
                         } else {
-                            // Collected star — boost
                             setStarBoost(true);
                             setShowStarEffect(true);
                             setComboCount(c => c + 1);
@@ -216,56 +200,68 @@ export default function RunnerStage() {
         };
     }, [gameActive, showCountdown, starBoost]);
 
-    // ─── Victory → Navigate ───
     useEffect(() => {
         if (!isCaptured) return;
+        // Let the victory overlay play out before navigating
         const timer = setTimeout(() => router.push('/cart-birthday'), 5000);
         return () => clearTimeout(timer);
     }, [isCaptured, router]);
 
-    // ─── Progress (0-100) ───
+    // Progress 0-100
     const progress = Math.min(100, Math.max(0, ((FURINA_START_X - furinaX) / (FURINA_START_X - CAPTURE_THRESHOLD)) * 100));
+
+    // Scenery freezes during the countdown and once Furina is caught
+    const worldMoving = gameActive && !showCountdown;
 
     return (
         <div className="flex flex-col items-center justify-center w-full h-full relative overflow-hidden select-none">
 
-            {/* ════════════ PARALLAX BACKGROUND ════════════ */}
-            {/* Sky gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a2e] via-[#16213e] to-[#0f3460] z-0" />
-
-            {/* Distant mountains/clouds parallax */}
+            {/* Sky: charcoal up top, crimson down at the horizon */}
             <div
-                className="absolute bottom-[30%] left-0 w-[200%] h-[20%] z-[1] opacity-20"
-                style={{
-                    backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 200\'%3E%3Cpath d=\'M0,200 L100,80 L200,140 L350,40 L500,120 L650,60 L800,130 L950,30 L1100,110 L1200,70 L1200,200 Z\' fill=\'%234a90d9\' /%3E%3C/svg%3E")',
-                    backgroundSize: '600px 100%',
-                    backgroundRepeat: 'repeat-x',
-                    transform: `translateX(-${roadOffset * 0.15}px)`,
-                }}
-            />
+                className="absolute top-0 left-0 right-0 h-[35%] z-0 overflow-hidden"
+                style={{ background: 'linear-gradient(to bottom, #0a0a0a 0%, #150808 48%, #2b0c0c 100%)' }}
+            >
+                {/* Crimson sun, half sunk behind the road */}
+                <div
+                    className="absolute left-[62%] bottom-[-32%] -translate-x-1/2"
+                    style={{
+                        height: '125%',
+                        aspectRatio: '1 / 1',
+                        backgroundImage: 'url(/textures/runner-sun.svg)',
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                    }}
+                />
 
-            {/* Stars / Particles in sky */}
-            <div className="absolute inset-0 z-[1] pointer-events-none">
-                {Array.from({ length: 20 }).map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 rounded-full bg-white/40"
-                        style={{
-                            top: `${5 + (i * 3.7) % 35}%`,
-                            left: `${(i * 17.3) % 100}%`,
-                        }}
-                        animate={{ opacity: [0.2, 0.8, 0.2] }}
-                        transition={{ duration: 2 + (i % 3), repeat: Infinity, delay: i * 0.3 }}
-                    />
-                ))}
+                {/* Ridge line, slowest layer */}
+                <div
+                    className="absolute bottom-0 left-0 w-[300%] h-[58%]"
+                    style={{
+                        ...panLayer('/textures/runner-hills.svg', 900),
+                        animation: 'runner-pan 34s linear infinite',
+                        animationPlayState: worldMoving ? 'running' : 'paused',
+                    }}
+                />
+
+                {/* Aqueduct arches, faster so it reads as closer */}
+                <div
+                    className="absolute bottom-0 left-0 w-[300%] h-[64%]"
+                    style={{
+                        ...panLayer('/textures/runner-arcade.svg', 520),
+                        animation: 'runner-pan 9s linear infinite',
+                        animationPlayState: worldMoving ? 'running' : 'paused',
+                    }}
+                />
             </div>
 
-            {/* ════════════ ROAD / TRACK ════════════ */}
-            <div className="absolute bottom-0 left-0 right-0 h-[65%] z-[2]">
+            <div className="absolute bottom-0 left-0 right-0 h-[65%] z-[2] overflow-hidden">
                 {/* Road base */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#2a1a3e] via-[#1a1030] to-[#0d0a15]" />
+                <div
+                    className="absolute inset-0"
+                    style={{ background: 'linear-gradient(to bottom, #240e0e 0%, #170909 38%, #0c0505 100%)' }}
+                />
 
-                {/* Lane background tints — alternate shading so lanes are obvious */}
+                {/* Lane background tints: alternate shading so lanes are obvious */}
                 {[0, 1, 2].map((i) => (
                     <div
                         key={`lane-bg-${i}`}
@@ -274,63 +270,57 @@ export default function RunnerStage() {
                             top: `${(i / 3) * 100}%`,
                             height: `${100 / 3}%`,
                             background: i % 2 === 0
-                                ? 'rgba(139, 92, 246, 0.04)'
-                                : 'rgba(255, 255, 255, 0.02)',
+                                ? 'rgba(196, 48, 48, 0.05)'
+                                : 'rgba(245, 240, 235, 0.015)',
                         }}
                     />
                 ))}
 
-                {/* Animated road lines */}
-                <div className="absolute inset-0 overflow-hidden">
-                    {/* Lane divider glowing lines */}
-                    {[33, 66].map((top) => (
-                        <div
-                            key={top}
-                            className="absolute left-0 right-0"
-                            style={{ top: `${top}%` }}
-                        >
-                            {/* Solid glow line */}
-                            <div className="absolute left-0 right-0 h-[1px] bg-purple-400/15" />
-                            {/* Animated dashed line on top */}
-                            <div className="absolute left-0 right-0 h-[2px] -top-[0.5px]">
-                                <div
-                                    className="w-[200%] h-full"
-                                    style={{
-                                        backgroundImage: 'repeating-linear-gradient(90deg, #a78bfa 0px, #a78bfa 24px, transparent 24px, transparent 48px)',
-                                        opacity: 0.35,
-                                        transform: `translateX(-${roadOffset}px)`,
-                                    }}
-                                />
-                            </div>
-                            {/* Glow bloom */}
-                            <div className="absolute left-0 right-0 h-[6px] -top-[2.5px] bg-purple-500/5 blur-sm" />
-                        </div>
-                    ))}
+                {/* Dust streaks on the asphalt, just to sell the speed */}
+                {[18, 42, 68, 88].map((top, i) => (
+                    <div
+                        key={`streak-${top}`}
+                        className="absolute left-0 w-[300%] h-[1px]"
+                        style={{
+                            top: `${top}%`,
+                            backgroundImage: 'repeating-linear-gradient(90deg, rgba(245,240,235,0.28) 0px, rgba(245,240,235,0.28) 30px, transparent 30px, transparent 200px)',
+                            opacity: 0.16,
+                            ['--pan' as string]: '-200px',
+                            animation: `runner-pan ${0.85 - i * 0.13}s linear infinite`,
+                            animationPlayState: worldMoving ? 'running' : 'paused',
+                        }}
+                    />
+                ))}
 
-                    {/* Ground texture lines (speed effect) */}
-                    {Array.from({ length: 8 }).map((_, i) => (
+                {/* Lane dividers */}
+                {[33.33, 66.66].map((top) => (
+                    <div key={top} className="absolute left-0 right-0" style={{ top: `${top}%` }}>
+                        <div className="absolute left-0 right-0 h-[1px] bg-gold/10" />
                         <div
-                            key={`line-${i}`}
-                            className="absolute left-0 right-0 h-[1px] opacity-[0.06]"
-                            style={{ top: `${10 + i * 12}%` }}
-                        >
-                            <div
-                                className="w-[200%] h-full bg-white"
-                                style={{
-                                    backgroundImage: 'repeating-linear-gradient(90deg, white 0px, white 4px, transparent 4px, transparent 20px)',
-                                    transform: `translateX(-${roadOffset * (1 + i * 0.1)}px)`,
-                                }}
-                            />
-                        </div>
-                    ))}
-                </div>
+                            className="absolute left-0 w-[300%] h-[2px] -top-[0.5px]"
+                            style={{
+                                backgroundImage: 'repeating-linear-gradient(90deg, rgba(201,168,76,0.5) 0px, rgba(201,168,76,0.5) 44px, transparent 44px, transparent 120px)',
+                                ['--pan' as string]: '-120px',
+                                animation: 'runner-pan 0.5s linear infinite',
+                                animationPlayState: worldMoving ? 'running' : 'paused',
+                            }}
+                        />
+                    </div>
+                ))}
 
                 {/* Road edges */}
-                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-crimson-glow/30 to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-crimson/25 to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-crimson-glow/25 to-transparent" />
             </div>
 
-            {/* ════════════ LANE TAP ZONES (Mobile) ════════════ */}
+            {/* Vignette to keep the eye on the lanes */}
+            <div
+                className="absolute inset-0 z-[4] pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse at 50% 55%, transparent 45%, rgba(6,3,3,0.55) 100%)' }}
+            />
+
+            {/* Lane tap zones (mobile) */}
             <div className="absolute bottom-0 left-0 right-0 h-[65%] z-[3] md:pointer-events-none">
                 {LANE_POSITIONS.map((_, i) => (
                     <div
@@ -345,7 +335,7 @@ export default function RunnerStage() {
                 ))}
             </div>
 
-            {/* ════════════ ARLECCHINO (Player) ════════════ */}
+            {/* Arlecchino (player) */}
             <motion.div
                 className="absolute z-[10] w-24 h-28 md:w-32 md:h-36"
                 style={{ left: `${ARLE_X}%` }}
@@ -395,7 +385,7 @@ export default function RunnerStage() {
                 </AnimatePresence>
             </motion.div>
 
-            {/* ════════════ FURINA (Target) ════════════ */}
+            {/* Furina (target) */}
             <motion.div
                 className="absolute z-[10] w-20 h-24 md:w-28 md:h-32"
                 style={{
@@ -403,7 +393,6 @@ export default function RunnerStage() {
                     top: `${35 + LANE_POSITIONS[1] * 0.65 - 12}%`, // Always in center lane
                 }}
                 animate={{
-                    // Furina running wobble
                     rotate: [-3, 3, -3],
                 }}
                 transition={{ duration: 0.5, repeat: Infinity }}
@@ -434,7 +423,6 @@ export default function RunnerStage() {
                 )}
             </motion.div>
 
-            {/* ════════════ OBSTACLES (Slimes & Stars) ════════════ */}
             {obstacles.map((obs) => (
                 <motion.div
                     key={obs.id}
@@ -471,7 +459,6 @@ export default function RunnerStage() {
                 </motion.div>
             ))}
 
-            {/* ════════════ STAR BOOST EFFECT ════════════ */}
             <AnimatePresence>
                 {showStarEffect && (
                     <motion.div
@@ -487,7 +474,7 @@ export default function RunnerStage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════ HUD ════════════ */}
+            {/* HUD */}
             <div className="absolute top-0 left-0 right-0 z-[20] p-4 md:p-6">
                 {/* Top Bar */}
                 <div className="flex items-center justify-between mb-3">
@@ -557,7 +544,7 @@ export default function RunnerStage() {
                 </div>
             </div>
 
-            {/* ════════════ CONTROLS HINT ════════════ */}
+            {/* Controls hint */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -575,7 +562,6 @@ export default function RunnerStage() {
                 </div>
             </motion.div>
 
-            {/* ════════════ COUNTDOWN ════════════ */}
             <AnimatePresence>
                 {showCountdown && (
                     <motion.div
@@ -608,7 +594,7 @@ export default function RunnerStage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════ SCREEN HIT FLASH ════════════ */}
+            {/* Full screen flash on hit */}
             <AnimatePresence>
                 {hitFlash && (
                     <motion.div
@@ -621,7 +607,6 @@ export default function RunnerStage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════ BOOST AURA BORDER ════════════ */}
             {starBoost && (
                 <motion.div
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -631,7 +616,7 @@ export default function RunnerStage() {
                 />
             )}
 
-            {/* ════════════ VICTORY OVERLAY ════════════ */}
+            {/* Victory overlay */}
             <AnimatePresence>
                 {isCaptured && (
                     <motion.div

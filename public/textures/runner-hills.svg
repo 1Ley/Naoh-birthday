@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="180" viewBox="0 0 900 180" preserveAspectRatio="none">
+  <!-- Cresta lejana -->
+  <path
+    d="M0,120 L70,84 L130,106 L210,58 L280,96 L360,70 L430,110 L500,76 L560,100 L640,52 L710,92 L780,74 L840,104 L900,120 L900,180 L0,180 Z"
+    fill="#1e0909" />
+  <!-- Cresta cercana -->
+  <path
+    d="M0,146 L80,124 L160,140 L250,118 L330,138 L420,120 L500,142 L590,122 L670,140 L760,126 L840,142 L900,146 L900,180 L0,180 Z"
+    fill="#150606" />
+</svg>

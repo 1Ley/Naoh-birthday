@@ -19,7 +19,6 @@ export default function StageTransition({ children }: StageTransitionProps) {
                 ease: [0.22, 1, 0.36, 1],
             }}
         >
-            {/* Crimson flash overlay on enter */}
             <motion.div
                 className="fixed inset-0 z-50 pointer-events-none bg-crimson"
                 initial={{ opacity: 0.6 }}

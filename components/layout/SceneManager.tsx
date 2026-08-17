@@ -75,7 +75,6 @@ function FinaleScene() {
             <pointLight position={[0, 3, 3]} intensity={0.8} color="#c9a84c" />
             <pointLight position={[-3, 1, 2]} intensity={0.4} color="#8b1a1a" />
 
-            {/* Floating crystal shards */}
             {shards.map((shard) => (
                 <Float
                     key={shard.id}
@@ -99,7 +98,6 @@ function FinaleScene() {
                 </Float>
             ))}
 
-            {/* Ember sparkles rising from the bottom */}
             <Sparkles
                 count={80}
                 scale={[10, 8, 4]}
@@ -128,7 +126,6 @@ export default function SceneManager() {
 
     return (
         <>
-            {/* Global scene elements */}
             <color attach="background" args={['#0a0a0a']} />
 
             {currentStage === 'quiz' && <QuizScene />}

@@ -11,8 +11,6 @@ export default function Home() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-gradient-to-b from-zinc-50 via-zinc-200 to-[#1a0505] text-charcoal-deep">
-
-      {/* Background Decor: "NAO" Typography */}
       <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden pointer-events-none select-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -24,7 +22,7 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* Character Image Layer - Moved out of grid to ignore padding */}
+      {/* ordenamiento nada importante, furina te amo */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,10 +40,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* Foreground Content */}
       <div className="relative z-20 w-full h-full max-w-[1600px] mx-auto grid grid-cols-12 px-6 md:px-12 py-8 pointer-events-none">
-
-        {/* Left Column: Mission Brief */}
         <div className="col-span-12 md:col-span-3 flex flex-col justify-center md:justify-end gap-8 order-2 md:order-1 pointer-events-auto md:pr-8">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -74,7 +69,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Center Column: Top Names (Overlay) */}
         <div className="col-span-12 md:col-span-6 flex flex-col items-center justify-start relative order-1 md:order-2 h-[20vh] md:h-full">
           <div className="w-full flex justify-between items-center px-4 mt-4 md:mt-0">
             <motion.h1
@@ -103,7 +97,7 @@ export default function Home() {
             </motion.h1>
           </div>
         </div>
-        {/* Right Column: Objective & CTA */}
+
         <div className="col-span-12 md:col-span-3 flex flex-col justify-center gap-8 order-3 relative z-20 mt-8 md:mt-0 pointer-events-auto">
           <motion.div
             initial={{ opacity: 0, x: 50 }}
@@ -120,7 +114,6 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,10 +133,8 @@ export default function Home() {
             </button>
           </motion.div>
         </div>
-
       </div>
 
-      {/* Subtle Particles/Noise */}
       <div className="absolute inset-0 z-0 opacity-30 pointer-events-none mix-blend-overlay">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <Sparkles count={50} scale={10} size={2} speed={0.2} color="#000" opacity={0.2} />

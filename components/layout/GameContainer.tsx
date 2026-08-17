@@ -31,7 +31,7 @@ export default function GameContainer() {
 
     return (
         <div ref={containerRef} className="relative w-screen h-screen overflow-hidden bg-charcoal-deep">
-            {/* Capa 0: Canvas R3F (fondo) */}
+            {/* fondo 3D */}
             <div className="absolute inset-0 z-0">
                 <Canvas
                     camera={{ position: [0, 0, 5], fov: 60 }}
@@ -45,15 +45,14 @@ export default function GameContainer() {
                 </Canvas>
             </div>
 
-            {/* Capa 1: Overlay grunge (decorativo) */}
             <GrungeOverlay />
 
-            {/* Capa 2: Interfaz UI (primer plano) */}
+            {/* UI por encima del canvas */}
             <div className="absolute inset-0 z-20">
                 <StageUI />
             </div>
 
-            {/* Panel de desarrollo — selector de etapas temporal */}
+            {/* selector de etapas, solo en dev */}
             <DevPanel />
         </div>
     );

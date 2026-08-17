@@ -10,7 +10,7 @@ import { QUIZ_QUESTIONS } from '@/lib/constants';
 const CHARACTER_IMAGES = [
     '/images/characters/arlecchino_gfxrender1.png', // Preguntas 1-2
     '/images/characters/arlecchino_fullbody.png',  // Preguntas 3-4
-    '/images/ui/b1e03c89bc8aa8946cd76a34fb01c6f0.png', // Pregunta 5 (Requested UI Asset)
+    '/images/ui/b1e03c89bc8aa8946cd76a34fb01c6f0.png', // Pregunta 5
 ];
 
 export default function QuizStage() {
@@ -21,7 +21,6 @@ export default function QuizStage() {
     const [showResult, setShowResult] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
 
-    // Calcular imagen actual basada en el progreso
     const currentImageIndex = Math.min(
         Math.floor(currentQuestion / 2),
         CHARACTER_IMAGES.length - 1
@@ -61,9 +60,6 @@ export default function QuizStage() {
 
     return (
         <div className="relative w-full h-full flex flex-col md:flex-row overflow-hidden">
-            {/* ════════════════════════════════════════════
-                BACKGROUND & DECOR
-            ════════════════════════════════════════════ */}
             {/* Texto gigante de fondo "THE KNAVE" */}
             <div className="absolute top-20 left-10 z-0 opacity-[0.03] select-none pointer-events-none">
                 <h1 className="font-black text-[20vw] leading-none tracking-tighter text-white">
@@ -71,9 +67,7 @@ export default function QuizStage() {
                 </h1>
             </div>
 
-            {/* ════════════════════════════════════════════
-                COLUMNA IZQUIERDA: QUIZ UI
-            ════════════════════════════════════════════ */}
+            {/* Columna izquierda: quiz */}
             <div className="w-full md:w-1/2 h-full flex flex-col justify-center px-8 md:px-24 relative z-40 bg-gradient-to-r from-charcoal-deep/95 via-charcoal-deep/80 to-transparent">
 
                 {/* Header GFX */}
@@ -171,11 +165,9 @@ export default function QuizStage() {
                 </AnimatePresence>
             </div>
 
-            {/* ════════════════════════════════════════════
-                COLUMNA DERECHA: IMAGEN DE PERSONAJE
-            ════════════════════════════════════════════ */}
+            {/* Columna derecha: imagen del personaje */}
             <div className="hidden md:block w-1/2 h-full relative z-10 pointer-events-none">
-                {/* Círculo decorativo rotando detrás del personaje (Centrado en la columna) */}
+                {/* Círculo decorativo rotando detrás del personaje */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vh] h-[60vh] rounded-full border border-white/40 opacity-50 z-0 shadow-[0_0_60px_rgba(255,255,255,0.15)]">
                     <div className="absolute inset-0 rounded-full border-[4px] border-t-white/90 border-r-transparent border-b-white/30 border-l-transparent animate-[spin_8s_linear_infinite]" />
                     <div className="absolute inset-4 rounded-full border-[1px] border-white/20" />
@@ -203,10 +195,10 @@ export default function QuizStage() {
                 </AnimatePresence>
             </div>
 
-            {/* DEGRADADO INFERIOR GLOBAL (Fixed: Full width bottom gradient) */}
+            {/* Degradado inferior global */}
             <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-charcoal-deep via-charcoal-deep/90 to-transparent pointer-events-none z-10" />
 
-            {/* Overlay de Victoria (Estilo GFX) */}
+            {/* Overlay de victoria */}
             <AnimatePresence>
                 {isComplete && (
                     <motion.div

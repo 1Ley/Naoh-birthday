@@ -5,67 +5,52 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import gsap from 'gsap';
 
-// ═══════════════════════════════════════════════════════════════════
-// GFX Birthday Card — Arlecchino × Naomi (xmandi)
-// Style: Bright gradients, prismatic lens flares, acrylic panels,
-//        bold overlapping typography, magazine editorial layout
-// ═══════════════════════════════════════════════════════════════════
-
 export default function FinaleStage() {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // ─── GSAP Staggered Entrance ───
     useEffect(() => {
         if (!containerRef.current) return;
 
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-            // Fade in background elements
             tl.fromTo('.gfx-bg-element', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1.5, stagger: 0.1 }, 0);
 
-            // Character entry
             tl.fromTo('.gfx-hero-character',
                 { opacity: 0, y: 60, scale: 0.95 },
                 { opacity: 1, y: 0, scale: 1, duration: 1.4, ease: 'power3.out' },
                 0.2
             );
 
-            // Big typography
             tl.fromTo('.gfx-big-text',
                 { opacity: 0, x: -80, skewX: -5 },
                 { opacity: 1, x: 0, skewX: 0, duration: 1.0, stagger: 0.15 },
                 0.5
             );
 
-            // Acrylic panels
             tl.fromTo('.gfx-panel',
                 { opacity: 0, y: 30, backdropFilter: 'blur(0px)' },
                 { opacity: 1, y: 0, backdropFilter: 'blur(16px)', duration: 0.8, stagger: 0.12 },
                 0.9
             );
 
-            // Info labels
             tl.fromTo('.gfx-label',
                 { opacity: 0, y: 15 },
                 { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 },
                 1.3
             );
 
-            // Prismatic flares
             tl.fromTo('.gfx-flare',
                 { opacity: 0, scale: 0.5 },
                 { opacity: 1, scale: 1, duration: 1.2, stagger: 0.2 },
                 1.0
             );
 
-            // Bottom tags
             tl.fromTo('.gfx-tag',
                 { opacity: 0, y: 10 },
                 { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 },
                 1.8
             );
-
         }, containerRef);
 
         return () => ctx.revert();
@@ -77,7 +62,6 @@ export default function FinaleStage() {
             className="relative w-full h-full overflow-hidden select-none"
             style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}
         >
-            {/* ═══════════ BACKGROUND: Bright gradient base ═══════════ */}
             <div className="gfx-bg-element absolute inset-0 z-0"
                 style={{
                     background: `
@@ -90,15 +74,12 @@ export default function FinaleStage() {
                 }}
             />
 
-            {/* Soft light wash overlay */}
             <div className="gfx-bg-element absolute inset-0 z-[1] opacity-0"
                 style={{
                     background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(255,255,255,0.015) 70%, transparent 100%)',
                 }}
             />
 
-            {/* ═══════════ PRISMATIC LENS FLARES (Rainbow light reflections) ═══════════ */}
-            {/* Main prismatic flare — top right */}
             <div className="gfx-flare absolute z-[5] pointer-events-none opacity-0"
                 style={{ top: '-5%', right: '10%', width: '350px', height: '350px' }}
             >
@@ -108,7 +89,6 @@ export default function FinaleStage() {
                         filter: 'blur(50px)',
                     }}
                 />
-                {/* Inner bright core */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full"
                     style={{
                         background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(200,180,255,0.05) 60%, transparent 100%)',
@@ -117,7 +97,6 @@ export default function FinaleStage() {
                 />
             </div>
 
-            {/* Secondary prismatic — bottom left */}
             <div className="gfx-flare absolute z-[5] pointer-events-none opacity-0"
                 style={{ bottom: '10%', left: '-3%', width: '280px', height: '280px' }}
             >
@@ -129,7 +108,6 @@ export default function FinaleStage() {
                 />
             </div>
 
-            {/* Small prismatic spots scattered */}
             {[
                 { top: '30%', left: '15%', size: 80 },
                 { top: '60%', right: '25%', size: 100 },
@@ -153,8 +131,6 @@ export default function FinaleStage() {
                 </motion.div>
             ))}
 
-            {/* ═══════════ ACRYLIC GLOW SHAPES (Soft light panels) ═══════════ */}
-            {/* Large soft glow behind character */}
             <div className="gfx-bg-element absolute z-[2] pointer-events-none opacity-0"
                 style={{
                     top: '5%', right: '-10%',
@@ -164,10 +140,9 @@ export default function FinaleStage() {
                 }}
             />
 
-            {/* ═══════════ BIG TYPOGRAPHY — Behind character ═══════════ */}
+            {/* watermark behind the character */}
             <div className="absolute inset-0 z-[6] pointer-events-none overflow-hidden">
-                {/* Giant "ARLECCHINO" watermark */}
-                <div className="gfx-big-text absolute top-[12%] left-[5%] opacity-0" >
+                <div className="gfx-big-text absolute top-[12%] left-[5%] opacity-0">
                     <h1 className="font-gfx text-[11vw] font-black uppercase italic leading-[0.85] tracking-[-0.04em]"
                         style={{
                             color: 'transparent',
@@ -189,7 +164,6 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ HERO CHARACTER IMAGE ═══════════ */}
             <div className="gfx-hero-character absolute z-[12] opacity-0"
                 style={{
                     right: '-3%',
@@ -209,7 +183,6 @@ export default function FinaleStage() {
                     }}
                     priority
                 />
-                {/* Glow underneath character */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] h-48"
                     style={{
                         background: 'radial-gradient(ellipse at bottom, rgba(140,60,200,0.12) 0%, rgba(200,100,150,0.06) 40%, transparent 70%)',
@@ -218,10 +191,8 @@ export default function FinaleStage() {
                 />
             </div>
 
-            {/* ═══════════ MAIN CONTENT LAYER ═══════════ */}
+            {/* main content layer */}
             <div className="absolute inset-0 z-[20] p-6 md:p-10 flex flex-col justify-between pointer-events-none">
-
-                {/* ──── TOP: Header bar ──── */}
                 <div className="flex justify-between items-start">
                     <div className="gfx-label opacity-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -241,9 +212,7 @@ export default function FinaleStage() {
                     </div>
                 </div>
 
-                {/* ──── LEFT SIDE: Title + Name + Info ──── */}
                 <div className="flex-1 flex flex-col justify-center max-w-[50%] md:max-w-[42%] mt-4">
-                    {/* Main Title */}
                     <div className="mb-6">
                         <h1 className="gfx-big-text font-gfx text-[10vw] md:text-[7vw] font-black text-white uppercase italic leading-[0.9] tracking-[-0.03em] opacity-0"
                             style={{
@@ -265,7 +234,6 @@ export default function FinaleStage() {
                                 Birthday
                             </h1>
                         </div>
-                        {/* Handwritten-style accent */}
                         <motion.p
                             className="gfx-label font-serif text-xl md:text-2xl italic text-pink-300/60 -mt-1 ml-2 opacity-0"
                             animate={{ rotate: [-2, -1, -2] }}
@@ -275,7 +243,6 @@ export default function FinaleStage() {
                         </motion.p>
                     </div>
 
-                    {/* Name section */}
                     <div className="gfx-panel mb-6 opacity-0">
                         <p className="font-serif text-4xl md:text-6xl font-bold text-white italic tracking-wide"
                             style={{
@@ -292,7 +259,6 @@ export default function FinaleStage() {
                         </div>
                     </div>
 
-                    {/* Description / Birthday Message */}
                     <div className="gfx-panel opacity-0 max-w-sm">
                         <p className="font-serif text-white/70 text-sm md:text-base leading-relaxed italic">
                             Hoy el mundo brilla un poco más porque existes tú. Cada momento
@@ -302,9 +268,7 @@ export default function FinaleStage() {
                     </div>
                 </div>
 
-                {/* ──── BOTTOM SECTION ──── */}
                 <div className="flex items-end justify-between gap-4">
-                    {/* Bottom left info tags */}
                     <div className="flex flex-wrap gap-2">
                         {['Arlecchino Main', 'The Knave', 'Fatui Harbinger', 'Snezhnaya', 'Feliz Cumpleaños'].map((tag) => (
                             <div key={tag}
@@ -317,7 +281,6 @@ export default function FinaleStage() {
                         ))}
                     </div>
 
-                    {/* Bottom right mini banner */}
                     <div className="gfx-label opacity-0 hidden md:block">
                         <div className="relative w-36 h-12 rounded overflow-hidden border border-white/5">
                             <Image
@@ -332,9 +295,7 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ FLOATING ACRYLIC PANELS (Character data) ═══════════ */}
-
-            {/* Panel: Character Info — left side */}
+            {/* character info panel */}
             <div className="gfx-panel absolute z-[22] left-6 md:left-10 top-[58%] opacity-0"
                 style={{ maxWidth: '200px' }}
             >
@@ -345,7 +306,6 @@ export default function FinaleStage() {
                         boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
                     }}
                 >
-                    {/* Glass reflection line */}
                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
                     <p className="font-tech text-[7px] tracking-[0.3em] uppercase text-purple-300/50 mb-2">Character</p>
@@ -353,14 +313,12 @@ export default function FinaleStage() {
                     <p className="font-tech text-[9px] text-white/40 mt-1">The Knave · Harbinger IV</p>
                     <p className="font-tech text-[9px] text-white/30 mt-0.5">Fatui · Snezhnaya</p>
 
-                    {/* Star rating */}
                     <div className="flex gap-1 mt-3">
                         {Array.from({ length: 5 }).map((_, i) => (
                             <span key={i} className="text-[10px]" style={{ color: i < 5 ? '#c9a84c' : '#333' }}>★</span>
                         ))}
                     </div>
 
-                    {/* Inner prismatic reflection */}
                     <div className="absolute bottom-0 right-0 w-16 h-16 rounded-full opacity-30"
                         style={{
                             background: 'conic-gradient(from 0deg, rgba(255,100,150,0.2), rgba(100,200,255,0.15), rgba(255,200,100,0.1), rgba(255,100,150,0.2))',
@@ -370,7 +328,7 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* Panel: Birthday Date — right side floating */}
+            {/* birthday date panel */}
             <div className="gfx-panel absolute z-[22] right-[35%] md:right-[38%] top-[15%] opacity-0 hidden md:block">
                 <div className="rounded-xl px-5 py-4 border border-white/[0.08] relative overflow-hidden"
                     style={{
@@ -386,7 +344,7 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* Panel: Qualities — right side */}
+            {/* qualities panel */}
             <div className="gfx-panel absolute z-[22] right-[32%] md:right-[35%] top-[38%] opacity-0 hidden md:block">
                 <div className="rounded-xl px-4 py-3 border border-white/[0.06] relative overflow-hidden"
                     style={{
@@ -401,7 +359,6 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ BIRTHDAY PHOTO (Arle & Furina) ═══════════ */}
             <div className="gfx-panel absolute z-[18] left-[5%] bottom-[18%] opacity-0 hidden md:block">
                 <div className="relative rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl"
                     style={{
@@ -410,7 +367,6 @@ export default function FinaleStage() {
                         boxShadow: '0 12px 40px rgba(0,0,0,0.3), 0 0 60px rgba(140,80,200,0.08)',
                     }}
                 >
-                    {/* Glass shine overlay */}
                     <div className="absolute inset-0 z-10"
                         style={{
                             background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.04) 100%)',
@@ -422,12 +378,9 @@ export default function FinaleStage() {
                         fill
                         className="object-cover"
                     />
-                    {/* Photo label */}
                     <div className="absolute bottom-2 left-2 z-20">
-                        <p className="font-tech text-[6px] text-white/60 tracking-widest uppercase bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded"
-                        >Arle × Furina</p>
+                        <p className="font-tech text-[6px] text-white/60 tracking-widest uppercase bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded">Arle × Furina</p>
                     </div>
-                    {/* Prismatic corner reflection */}
                     <div className="absolute top-0 right-0 w-12 h-12 z-10"
                         style={{
                             background: 'conic-gradient(from 300deg, rgba(255,100,100,0.25), rgba(100,255,200,0.2), rgba(100,100,255,0.25), transparent)',
@@ -437,7 +390,6 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ SECONDARY IMAGE (Arle & Furina together) ═══════════ */}
             <div className="gfx-panel absolute z-[15] right-[5%] top-[5%] opacity-0 hidden lg:block">
                 <div className="relative rounded-lg overflow-hidden border border-white/[0.06]"
                     style={{
@@ -463,7 +415,6 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ MESSAGE PANEL — Bottom right area ═══════════ */}
             <div className="gfx-panel absolute z-[22] right-[5%] bottom-[20%] md:right-[8%] max-w-[280px] opacity-0 hidden md:block">
                 <div className="rounded-xl p-5 border border-white/[0.08] relative overflow-hidden"
                     style={{
@@ -487,11 +438,9 @@ export default function FinaleStage() {
                         Con todo mi amor ♥
                     </p>
 
-                    {/* Corner accents */}
                     <div className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-white/10" />
                     <div className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-white/10" />
 
-                    {/* Inner prismatic */}
                     <div className="absolute top-0 right-0 w-20 h-20 opacity-20"
                         style={{
                             background: 'conic-gradient(from 90deg, rgba(255,200,100,0.3), rgba(200,100,255,0.2), rgba(100,200,255,0.2), rgba(255,200,100,0.3))',
@@ -501,7 +450,6 @@ export default function FinaleStage() {
                 </div>
             </div>
 
-            {/* ═══════════ CHIBI FLOATING ═══════════ */}
             <motion.div
                 className="gfx-label absolute z-[25] opacity-0 hidden md:block"
                 style={{ bottom: '8%', left: '35%', width: '70px', height: '80px' }}
@@ -516,16 +464,12 @@ export default function FinaleStage() {
                 />
             </motion.div>
 
-            {/* ═══════════ ADDITIONAL CONGRATULATIONS TEXT (scattered) ═══════════ */}
-
-            {/* Top center text */}
             <div className="gfx-label absolute z-[20] top-[22%] left-[10%] opacity-0">
                 <p className="font-tech text-[8px] tracking-[0.3em] uppercase text-white/20">
                     Que todos tus deseos se hagan realidad
                 </p>
             </div>
 
-            {/* Side text */}
             <div className="gfx-label absolute z-[20] top-[45%] left-[3%] opacity-0 hidden md:block"
                 style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
             >
@@ -534,21 +478,18 @@ export default function FinaleStage() {
                 </p>
             </div>
 
-            {/* Floating quote */}
             <div className="gfx-label absolute z-[20] top-[72%] left-[22%] opacity-0 max-w-[180px] hidden md:block">
                 <p className="font-serif text-[11px] text-purple-200/40 italic leading-relaxed">
                     &ldquo;Eres la estrella más brillante en mi cielo&rdquo;
                 </p>
             </div>
 
-            {/* Tech-style label */}
             <div className="gfx-label absolute z-[20] bottom-[5%] left-[45%] opacity-0">
                 <p className="font-tech text-[7px] tracking-[0.2em] uppercase text-white/15">
                     ✦ Celebración Especial · ID: ARLCN-2026 · Status: Feliz ✦
                 </p>
             </div>
 
-            {/* ═══════════ SPARKLE PARTICLES ═══════════ */}
             <div className="absolute inset-0 z-[4] pointer-events-none overflow-hidden">
                 {Array.from({ length: 20 }).map((_, i) => (
                     <motion.div
@@ -580,13 +521,13 @@ export default function FinaleStage() {
                 ))}
             </div>
 
-            {/* ═══════════ CORNER BRACKETS ═══════════ */}
+            {/* corner brackets */}
             <div className="absolute top-4 left-4 w-5 h-5 border-t border-l border-white/15 z-[30]" />
             <div className="absolute top-4 right-4 w-5 h-5 border-t border-r border-white/15 z-[30]" />
             <div className="absolute bottom-4 left-4 w-5 h-5 border-b border-l border-white/15 z-[30]" />
             <div className="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-white/15 z-[30]" />
 
-            {/* ═══════════ ANIMATED LIGHT STREAK (diagonal) ═══════════ */}
+            {/* diagonal light streak */}
             <motion.div
                 className="absolute z-[3] pointer-events-none"
                 style={{
@@ -598,7 +539,7 @@ export default function FinaleStage() {
                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             />
 
-            {/* ═══════════ NOISE OVERLAY (subtle grain) ═══════════ */}
+            {/* noise grain */}
             <div
                 className="absolute inset-0 z-[28] pointer-events-none opacity-[0.025]"
                 style={{

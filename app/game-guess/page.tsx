@@ -8,7 +8,6 @@ import Image from 'next/image';
 import GrungeOverlay from '@/components/ui/GrungeOverlay';
 import QuizStage from '@/components/stages/QuizStage';
 
-// ─── Scene 3D de fondo ───
 function QuizScene() {
     return (
         <>
@@ -21,7 +20,6 @@ function QuizScene() {
     );
 }
 
-// ─── Partículas flotantes en la intro ───
 function IntroParticles() {
     const count = 30;
     const positions = new Float32Array(count * 3);
@@ -48,7 +46,6 @@ function IntroParticles() {
     );
 }
 
-// ─── Chibi que flota con movimiento orgánico ───
 function FloatingChibi() {
     return (
         <motion.div
@@ -86,7 +83,6 @@ function FloatingChibi() {
     );
 }
 
-// ─── Textos cinemáticos de la intro ───
 const INTRO_LINES = [
     { text: 'OPERACIÓN EN CURSO', style: 'mono', delay: 0.3 },
     { text: 'Yendo hacia la casa de Furina...', style: 'serif', delay: 1.2 },
@@ -128,9 +124,7 @@ export default function GameGuessPage() {
             {/* Overlay grunge */}
             <GrungeOverlay />
 
-            {/* ════════════════════════════════════════════
-                FASE 0: Intro Cinemática
-            ════════════════════════════════════════════ */}
+            {/* Fase 0: intro cinemática */}
             <AnimatePresence>
                 {introPhase === 0 && (
                     <motion.div
@@ -227,9 +221,7 @@ export default function GameGuessPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════════════════════════════
-                FASE 1: Quiz Activo
-            ════════════════════════════════════════════ */}
+            {/* Fase 1: quiz activo */}
             <AnimatePresence>
                 {introPhase === 1 && (
                     <motion.div

@@ -2,7 +2,7 @@
 
 import GrungeOverlay from '@/components/ui/GrungeOverlay';
 import BirthdayGFX from '@/components/stages/BirthdayGFX';
-
+// mis viejas w
 export default function CartBirthdayPage() {
     return (
         <div className="relative w-screen h-screen overflow-hidden bg-[#0a0608]">

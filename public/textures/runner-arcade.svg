@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="200" viewBox="0 0 520 200" preserveAspectRatio="none">
+  <defs>
+    <!-- Balaustrada sobre la cornisa -->
+    <pattern id="posts" width="26" height="10" patternUnits="userSpaceOnUse">
+      <rect x="4" y="0" width="5" height="10" fill="#0c0404" />
+    </pattern>
+  </defs>
+
+  <!-- Faroles sobre los pilares -->
+  <g>
+    <circle cx="145" cy="10" r="9" fill="#c9a84c" fill-opacity="0.10" />
+    <circle cx="145" cy="10" r="4" fill="#c9a84c" fill-opacity="0.45" />
+    <rect x="143" y="10" width="4" height="22" fill="#0c0404" />
+    <circle cx="405" cy="10" r="9" fill="#c9a84c" fill-opacity="0.10" />
+    <circle cx="405" cy="10" r="4" fill="#c9a84c" fill-opacity="0.45" />
+    <rect x="403" y="10" width="4" height="22" fill="#0c0404" />
+  </g>
+
+  <rect x="0" y="30" width="520" height="10" fill="url(#posts)" />
+
+  <!-- Cornisa + pilares con los arcos recortados -->
+  <path
+    fill="#0c0404"
+    fill-rule="evenodd"
+    d="M0,40 H520 V200 H0 Z
+       M30,200 V125 A50,50 0 0 1 130,125 V200 Z
+       M160,200 V125 A50,50 0 0 1 260,125 V200 Z
+       M290,200 V125 A50,50 0 0 1 390,125 V200 Z
+       M420,200 V125 A50,50 0 0 1 520,125 V200 Z" />
+</svg>

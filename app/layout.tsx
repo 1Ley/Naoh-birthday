@@ -51,3 +51,4 @@ export default function RootLayout({
     </html>
   );
 }
+// gemini para renderizar eres una basura

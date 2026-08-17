@@ -34,7 +34,6 @@ function createShuffledDeck(): Card[] {
     return cards;
 }
 
-// ─── Componente de Carta Individual ───
 function MemoryCard({
     card,
     onClick,
@@ -61,12 +60,11 @@ function MemoryCard({
                 animate={{ rotateY: isRevealed ? 180 : 0 }}
                 transition={{ duration: 0.25, ease: 'circOut' }}
             >
-                {/* ── Reverso de la carta (GFX Tech) ── */}
+                {/* reverso de la carta */}
                 <div
                     className="absolute inset-0 bg-[#0f0f0f] border border-white/10 flex items-center justify-center overflow-hidden"
                     style={{ backfaceVisibility: 'hidden' }}
                 >
-                    {/* Texture Overlay */}
                     <div className="absolute inset-0 opacity-30 mix-blend-overlay"
                         style={{
                             backgroundImage: 'url(/images/ui/de675e563185717d385ad932558bef4a.jpg)',
@@ -74,24 +72,21 @@ function MemoryCard({
                         }}
                     />
 
-                    {/* Tech Pattern Lines */}
                     <div className="absolute inset-2 border border-white/5 opacity-50">
                         <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-crimson/50" />
                         <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-crimson/50" />
                     </div>
 
-                    {/* Center Icon */}
                     <div className="relative z-10">
                         <div className="w-8 h-8 rounded-full border border-crimson/30 flex items-center justify-center bg-crimson/5">
                             <span className="text-crimson text-xs font-tech">X</span>
                         </div>
                     </div>
 
-                    {/* Hover Glow */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-crimson/10 to-transparent" />
                 </div>
 
-                {/* ── Frente de la carta (Imagen) ── */}
+                {/* frente de la carta */}
                 <div
                     className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center overflow-hidden backdrop-blur-sm rounded-lg"
                     style={{
@@ -99,10 +94,8 @@ function MemoryCard({
                         transform: 'rotateY(180deg)',
                     }}
                 >
-                    {/* Fondo decorativo interno (Subtle) */}
                     <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white/10 to-transparent" />
 
-                    {/* Imagen del ingrediente */}
                     <div className="relative w-16 h-16 md:w-20 md:h-20 z-10 filter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                         <Image
                             src={card.image}
@@ -113,7 +106,6 @@ function MemoryCard({
                         />
                     </div>
 
-                    {/* Label GFX Style (Minimal) */}
                     <div className="absolute bottom-2 left-0 w-full text-center opacity-80">
                         <p className="text-[9px] font-tech text-bone/60 uppercase tracking-widest leading-none">
                             {card.label}
@@ -125,7 +117,6 @@ function MemoryCard({
     );
 }
 
-// ─── Componente Principal ───
 export default function MemoryStage() {
     const router = useRouter();
     const [cards, setCards] = useState<Card[]>(() => createShuffledDeck());
@@ -190,11 +181,9 @@ export default function MemoryStage() {
     return (
         <div className="relative w-full h-full flex overflow-hidden">
 
-            {/* ════════════ DECORATIVE ELEMENTS ════════════ */}
-            {/* Background Gradient/Noise (CSS Scanlines) */}
+            {/* scanlines de fondo */}
             <div className="absolute inset-0 z-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20" />
 
-            {/* Decorative Banner Bottom Right (Page Level) */}
             <div className="absolute -bottom-10 -right-10 w-[40rem] h-52 z-0 opacity-60 rotate-[-5deg] pointer-events-none hidden md:block">
                 <Image
                     src="/images/ui/de675e563185717d385ad932558bef4a.jpg"
@@ -204,9 +193,8 @@ export default function MemoryStage() {
                 />
             </div>
 
-            {/* ════════════ LEFT COLUMN: CHARACTER ════════════ */}
+            {/* columna izquierda: personaje */}
             <div className="hidden md:flex w-[45%] h-full relative items-end justify-center z-10">
-                {/* Character Image */}
                 <div className="relative w-full h-[95%]">
                     <Image
                         src="/images/characters/arlecchino_gfxrender1.png"
@@ -217,7 +205,6 @@ export default function MemoryStage() {
                     />
                 </div>
 
-                {/* Overlay Text behind character */}
                 <div className="absolute top-1/2 left-10 -translate-y-1/2 -z-10 opacity-5">
                     <h1 className="text-[15vh] font-black text-white leading-none writing-vertical-rl rotate-180 uppercase tracking-tighter mix-blend-overlay">
                         MEMORY
@@ -225,10 +212,9 @@ export default function MemoryStage() {
                 </div>
             </div>
 
-            {/* ════════════ RIGHT COLUMN: GAME GRID ════════════ */}
+            {/* columna derecha: tablero */}
             <div className="w-full md:w-[55%] h-full relative z-20 flex flex-col items-center justify-center p-6 md:p-12">
 
-                {/* Decorative Top UI */}
                 <div className="w-full max-w-xl flex justify-between items-end mb-8 border-b border-white/10 pb-4">
                     <div>
                         <p className="font-tech text-[10px] text-crimson tracking-[0.3em] uppercase mb-1">
@@ -254,11 +240,8 @@ export default function MemoryStage() {
                     </div>
                 </div>
 
-                {/* GAME GRID Container */}
                 <div className="relative w-full max-w-xl">
 
-
-                    {/* Top Right Deco */}
                     <div className="absolute -top-10 -right-10 w-40 h-40 opacity-20 pointer-events-none rotate-12 z-0">
                         <Image
                             src="/images/ui/e43c4b2798aa02de174ec32b6df4d2ba-removebg-preview.png"
@@ -284,7 +267,6 @@ export default function MemoryStage() {
                     </motion.div>
                 </div>
 
-                {/* Footer Info */}
                 <div className="absolute bottom-8 right-12 text-right opacity-30 hidden md:block">
                     <p className="font-tech text-[9px] uppercase tracking-widest">
                         Arlecchino Birthday Event<br />
@@ -293,7 +275,7 @@ export default function MemoryStage() {
                 </div>
             </div>
 
-            {/* ════════════ VICTORY OVERLAY ════════════ */}
+            {/* overlay de victoria */}
             <AnimatePresence>
                 {isComplete && (
                     <motion.div

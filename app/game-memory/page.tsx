@@ -8,14 +8,12 @@ import { Sparkles } from '@react-three/drei';
 import GrungeOverlay from '@/components/ui/GrungeOverlay';
 import MemoryStage from '@/components/stages/MemoryStage';
 
-// ─── Textos cinemáticos ───
 const INTRO_LINES = [
     { text: 'La puerta está cerrada...', sub: '' },
     { text: 'Parece que tiene un acertijo', sub: 'Un candado de memoria' },
     { text: 'Resuelve el acertijo', sub: 'Empareja los ingredientes' },
 ];
 
-// ─── Chibi flotante independiente ───
 function FloatingChibi() {
     return (
         <motion.div
@@ -44,7 +42,6 @@ function FloatingChibi() {
     );
 }
 
-// ─── Partículas R3F de fondo ───
 function IntroParticles() {
     return (
         <>
@@ -57,21 +54,21 @@ function IntroParticles() {
 }
 
 export default function GameMemoryPage() {
-    const [introPhase, setIntroPhase] = useState(0); // 0=converge, 1=texts, 2=game
+    const [introPhase, setIntroPhase] = useState(0);
     const [textIndex, setTextIndex] = useState(0);
     const [convergeComplete, setConvergeComplete] = useState(false);
 
-    // Fase 0: Convergencia chibi + puerta → luego textos
+    // Fase 0: convergencia chibi de mierda + puerta, luego textos, nada interesante.
     useEffect(() => {
         if (introPhase !== 0) return;
         const timer = setTimeout(() => {
             setConvergeComplete(true);
-            setTimeout(() => setIntroPhase(1), 800); // pausa antes de los textos
+            setTimeout(() => setIntroPhase(1), 800);
         }, 2800); // duración de la convergencia
         return () => clearTimeout(timer);
     }, [introPhase]);
 
-    // Fase 1: Textos cinemáticos secuenciales
+    // Fase 1: textos cinemáticos y el contador
     useEffect(() => {
         if (introPhase !== 1) return;
         const timers = [
@@ -84,7 +81,6 @@ export default function GameMemoryPage() {
 
     return (
         <div className="relative w-screen h-screen overflow-hidden bg-charcoal-deep">
-            {/* Fondo R3F */}
             <div className="absolute inset-0 z-0">
                 <Canvas camera={{ position: [0, 0, 5], fov: 60 }} dpr={[1, 2]}>
                     <Suspense fallback={null}>
@@ -95,7 +91,7 @@ export default function GameMemoryPage() {
 
             <GrungeOverlay />
 
-            {/* ════════════════════ FASE 0: CONVERGENCIA ════════════════════ */}
+            {/* Fase 0: convergencia */}
             <AnimatePresence>
                 {introPhase === 0 && (
                     <motion.div
@@ -105,7 +101,6 @@ export default function GameMemoryPage() {
                         transition={{ duration: 0.6 }}
                         className="absolute inset-0 z-30 flex items-center justify-center"
                     >
-                        {/* Chibi Arlecchino (desde la izquierda) */}
                         <motion.div
                             initial={{ x: '-50vw', opacity: 0 }}
                             animate={{
@@ -121,7 +116,6 @@ export default function GameMemoryPage() {
                             <FloatingChibi />
                         </motion.div>
 
-                        {/* Puerta Minecraft (desde la derecha) */}
                         <motion.div
                             initial={{ x: '50vw', opacity: 0 }}
                             animate={{
@@ -153,7 +147,6 @@ export default function GameMemoryPage() {
                             </motion.div>
                         </motion.div>
 
-                        {/* Línea decorativa central */}
                         <motion.div
                             initial={{ scaleY: 0, opacity: 0 }}
                             animate={{ scaleY: 1, opacity: 0.3 }}
@@ -164,7 +157,7 @@ export default function GameMemoryPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════ FASE 1: TEXTOS CINEMÁTICOS ════════════════════ */}
+            {/* Fase 1: textos */}
             <AnimatePresence>
                 {introPhase === 1 && (
                     <motion.div
@@ -185,11 +178,9 @@ export default function GameMemoryPage() {
                             }}
                         />
 
-                        {/* Líneas horizontales decorativas */}
                         <div className="absolute top-[35%] w-full h-[1px] bg-gradient-to-r from-transparent via-crimson/20 to-transparent" />
                         <div className="absolute bottom-[35%] w-full h-[1px] bg-gradient-to-r from-transparent via-bone/10 to-transparent" />
 
-                        {/* Textos secuenciales */}
                         <div className="flex flex-col items-center gap-4 relative z-20">
                             <AnimatePresence mode="wait">
                                 {textIndex >= 0 && textIndex < INTRO_LINES.length && (
@@ -237,7 +228,7 @@ export default function GameMemoryPage() {
                 )}
             </AnimatePresence>
 
-            {/* ════════════════════ FASE 2: JUEGO DE MEMORIA ════════════════════ */}
+            {/* Fase 2: juego de memoria */}
             <AnimatePresence>
                 {introPhase === 2 && (
                     <motion.div
@@ -252,7 +243,6 @@ export default function GameMemoryPage() {
                 )}
             </AnimatePresence>
 
-            {/* Esquinas decorativas */}
             <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-crimson/20 z-50 pointer-events-none" />
             <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-crimson/20 z-50 pointer-events-none" />
             <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-crimson/20 z-50 pointer-events-none" />

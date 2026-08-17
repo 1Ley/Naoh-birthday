@@ -1,4 +1,3 @@
-// ── Paleta de Colores ──
 export const COLORS = {
     crimson: '#4a0404',
     crimsonLight: '#8b1a1a',
@@ -12,7 +11,6 @@ export const COLORS = {
     goldLight: '#e6d18e',
 } as const;
 
-// ── Nombres de Etapas ──
 export const STAGE_NAMES = {
     quiz: 'Conoce a Arlecchino',
     memory: 'Fragmentos de Memoria',
@@ -20,7 +18,6 @@ export const STAGE_NAMES = {
     finale: 'El Gran Final',
 } as const;
 
-// ── Datos del Quiz ──
 export interface QuizQuestion {
     id: number;
     category: string;
@@ -67,7 +64,6 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     },
 ];
 
-// ── Pares del Juego de Memoria ──
 export interface MemoryPair {
     id: string;
     label: string;
@@ -81,7 +77,7 @@ export const MEMORY_PAIRS: MemoryPair[] = [
     { id: 'par-4', label: 'Trigo', image: '/images/iconos/wheat.png' },
 ];
 
-// ── Ingredientes del Runner ──
+// ingredientes que hay que recoger en el runner
 export const REQUIRED_INGREDIENTS = ['harina', 'huevo', 'fresas'] as const;
 
 export const INGREDIENT_LABELS: Record<string, string> = {

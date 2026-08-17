@@ -25,14 +25,11 @@ export default function Preloader() {
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        // Check if we've already loaded in this session to avoid showing it on every refresh during dev
-        // or navigation if using state management. For now, we want it on hard refresh.
-
         let loadedCount = 0;
         const total = PRELOAD_ASSETS.length;
 
         const loadImage = (src: string) => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const img = new Image();
                 img.src = src;
                 img.onload = () => resolve(src);
@@ -65,7 +62,6 @@ export default function Preloader() {
                     className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a0a] text-bone overflow-hidden"
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
-                    {/* Background visuals */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none">
                         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-crimson/20 via-transparent to-transparent" />
                     </div>
